@@ -33,14 +33,17 @@ const tasksSlice = createSlice({
       state.push(newTask)
       saveTasksToLocalStorage(state)
     },
+
     deleteTask: (state, action) => {
       const updatedTasks = state.filter(task => task.id !== action.payload.id)
       saveTasksToLocalStorage(updatedTasks)
       return updatedTasks
     },
+
     clearCompleted: state => {
       return state.filter(task => !task.isDone)
     },
+
     toggleTask: (state, action) => {
       const task = state.find(task => task.id === action.payload.id)
       if (task) {
@@ -48,14 +51,18 @@ const tasksSlice = createSlice({
         saveTasksToLocalStorage(state)
       }
     },
+
     editTask: (state, action) => {
       const task = state.find(task => task.id === action.payload.id)
       if (task && !task.isDone) {
         task.description = action.payload.description
         task.deadline = action.payload.deadline
         saveTasksToLocalStorage(state)
+      } else {
+        console.error('Завдання не знайдено або вже виконане.')
       }
     },
+
     setDeadline: (state, action) => {
       const task = state.find(task => task.id === action.payload.id)
       if (task) {

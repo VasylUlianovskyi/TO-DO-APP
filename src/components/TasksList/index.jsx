@@ -40,8 +40,10 @@ function TasksList () {
             <Task
               key={task.id}
               task={task}
+              onEdit={(newDescription, newDeadline) =>
+                handleEditTask(task.id, newDescription, newDeadline)
+              }
               onToggle={() => handleToggleTask(task.id)}
-              onEdit={() => handleEditTask(task.id)}
               onDelete={() => handleDeleteTask(task.id)}
               onSetDeadline={() => handleDeadline(task.id)}
             />
