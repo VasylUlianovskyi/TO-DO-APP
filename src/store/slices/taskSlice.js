@@ -38,6 +38,9 @@ const tasksSlice = createSlice({
       saveTasksToLocalStorage(updatedTasks)
       return updatedTasks
     },
+    clearCompleted: state => {
+      return state.filter(task => !task.isDone)
+    },
     toggleTask: (state, action) => {
       const task = state.find(task => task.id === action.payload.id)
       if (task) {
@@ -63,6 +66,12 @@ const tasksSlice = createSlice({
   }
 })
 
-export const { addTask, deleteTask, toggleTask, editTask, setDeadline } =
-  tasksSlice.actions
+export const {
+  addTask,
+  deleteTask,
+  toggleTask,
+  editTask,
+  setDeadline,
+  clearCompleted
+} = tasksSlice.actions
 export default tasksSlice.reducer
