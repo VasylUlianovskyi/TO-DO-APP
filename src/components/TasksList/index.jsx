@@ -18,12 +18,11 @@ function TasksList () {
   const [filter, setFilter] = useState('all')
 
   const handleToggleTask = id => dispatch(toggleTask({ id }))
-  const handleEditTask = (id, newDescription, newDeadline) =>
-    dispatch(
-      editTask({ id, description: newDescription, deadline: newDeadline })
-    )
+  const handleEditTask = (id, newDescription) =>
+    dispatch(editTask({ id, description: newDescription }))
   const handleDeleteTask = id => dispatch(deleteTask({ id }))
-  const handleDeadline = id => dispatch(setDeadline({ id }))
+  const handleDeadline = (id, newDeadline) =>
+    dispatch(setDeadline({ id, deadline: newDeadline }))
   const handleClearCompleted = () => dispatch(clearCompleted())
 
   const filteredTasks = tasks.filter(task => {
@@ -40,12 +39,12 @@ function TasksList () {
             <Task
               key={task.id}
               task={task}
-              onEdit={(newDescription, newDeadline) =>
-                handleEditTask(task.id, newDescription, newDeadline)
-              }
+              onEdit={newDescription => handleEditTask(task.id, newDescription)}
               onToggle={() => handleToggleTask(task.id)}
               onDelete={() => handleDeleteTask(task.id)}
-              onSetDeadline={() => handleDeadline(task.id)}
+              onSetDeadline={newDeadline =>
+                handleDeadline(task.id, newDeadline)
+              }
             />
           ))}
         </ul>

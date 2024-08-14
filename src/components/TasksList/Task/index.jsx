@@ -3,7 +3,7 @@ import { MdModeEditOutline, MdDeleteOutline } from 'react-icons/md'
 import { CiTimer } from 'react-icons/ci'
 import styles from '../TasksList.module.sass'
 
-function Task ({ task, onToggle, onEdit, onDelete, onSetDeadline }) {
+function Task ({ task, onToggle, onEdit, onDelete, setDeadline }) {
   const [isEditing, setIsEditing] = useState(false)
   const [newDescription, setNewDescription] = useState(task.description || '')
   const [newDeadline, setNewDeadline] = useState(task.deadline || '')
@@ -15,11 +15,17 @@ function Task ({ task, onToggle, onEdit, onDelete, onSetDeadline }) {
 
   const handleEditClick = () => {
     if (isEditing) {
-      onEdit(newDescription, newDeadline)
+      onEdit(newDescription)
     }
     setIsEditing(!isEditing)
   }
 
+  const handleNewDeadline = () => {
+    if (isEditing) {
+      setDeadline(newDeadline)
+    }
+    setIsEditing(!isEditing)
+  }
   const handleKeyDown = e => {
     if (e.key === 'Enter') {
       handleEditClick()
@@ -60,8 +66,8 @@ function Task ({ task, onToggle, onEdit, onDelete, onSetDeadline }) {
       )}
       <div className={styles.editingButtons}>
         <MdModeEditOutline onClick={handleEditClick} />
+        <CiTimer onClick={handleNewDeadline} />{' '}
         <MdDeleteOutline onClick={onDelete} />
-        <CiTimer onClick={onSetDeadline} />
       </div>
     </li>
   )
