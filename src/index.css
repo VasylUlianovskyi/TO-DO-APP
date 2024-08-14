@@ -6,8 +6,9 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  position: relative;
   font-family: Arial, Helvetica, sans-serif;
+  flex-grow: 1;
+  height: 100%;
 }
 
 .backgroundImg {
@@ -36,13 +37,4 @@
   left: 50%;
   transform: translate(-50%);
   z-index: 2;
-}
-
-.descript {
-  color: grey;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%);
-  bottom: -15rem;
-  font-size: 14px;
 }

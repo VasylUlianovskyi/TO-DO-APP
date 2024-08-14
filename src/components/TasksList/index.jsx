@@ -1,8 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useState } from 'react'
-import { MdModeEditOutline } from 'react-icons/md'
-import { MdDeleteOutline } from 'react-icons/md'
-import { CiTimer } from 'react-icons/ci'
 import {
   toggleTask,
   deleteTask,
@@ -11,6 +8,8 @@ import {
   clearCompleted
 } from '../../store/slices/taskSlice'
 import styles from './TasksList.module.sass'
+import Task from './Task'
+import TaskFooter from './TaskFooter'
 
 function TasksList () {
   const tasks = useSelector(state => state.tasks)
@@ -18,27 +17,14 @@ function TasksList () {
 
   const [filter, setFilter] = useState('all')
 
-  const handleToggleTask = id => {
-    dispatch(toggleTask({ id }))
-  }
-
-  const handleEditTask = (id, newDescription, newDeadline) => {
+  const handleToggleTask = id => dispatch(toggleTask({ id }))
+  const handleEditTask = (id, newDescription, newDeadline) =>
     dispatch(
       editTask({ id, description: newDescription, deadline: newDeadline })
     )
-  }
-
-  const handleDeleteTask = id => {
-    dispatch(deleteTask({ id }))
-  }
-
-  const handleDeadline = id => {
-    dispatch(setDeadline({ id }))
-  }
-
-  const handleClearCompleted = () => {
-    dispatch(clearCompleted())
-  }
+  const handleDeleteTask = id => dispatch(deleteTask({ id }))
+  const handleDeadline = id => dispatch(setDeadline({ id }))
+  const handleClearCompleted = () => dispatch(clearCompleted())
 
   const filteredTasks = tasks.filter(task => {
     if (filter === 'completed') return task.isDone
@@ -47,65 +33,29 @@ function TasksList () {
   })
 
   return (
-    <section className={styles.taskListContainer}>
-      <ul>
-        {filteredTasks.map(task => (
-          <li key={task.id} className={styles.taskEl}>
-            <input
-              type='checkbox'
-              checked={task.isDone}
-              onChange={() => handleToggleTask(task.id)}
+    <>
+      <section className={styles.taskListContainer}>
+        <ul>
+          {filteredTasks.map(task => (
+            <Task
+              key={task.id}
+              task={task}
+              onToggle={() => handleToggleTask(task.id)}
+              onEdit={() => handleEditTask(task.id)}
+              onDelete={() => handleDeleteTask(task.id)}
+              onSetDeadline={() => handleDeadline(task.id)}
             />
-            <span
-              onClick={() => handleToggleTask(task.id)}
-              className={styles.newCheckboxIcon}
-            ></span>
-            <p
-              style={{
-                textDecoration: task.isDone ? 'line-through' : 'none',
-                color: task.isDone ? 'grey' : 'black'
-              }}
-            >
-              {task.description}{' '}
-              {task.deadline && (
-                <span>{new Date(task.deadline).toLocaleDateString()}</span>
-              )}
-            </p>
-            <div className={styles.editingButtons}>
-              <MdModeEditOutline onClick={() => handleEditTask(task.id)} />
-              <MdDeleteOutline onClick={() => handleDeleteTask(task.id)} />
-              <CiTimer onClick={() => handleDeadline(task.id)} />
-            </div>
-          </li>
-        ))}
-      </ul>
-      <footer className={styles.taskListFooter}>
-        <p>{tasks.filter(task => !task.isDone).length} task left</p>
-        <div className={styles.filters}>
-          <button
-            className={filter === 'all' ? styles.activeFilter : ''}
-            onClick={() => setFilter('all')}
-          >
-            All
-          </button>{' '}
-          <button
-            className={filter === 'active' ? styles.activeFilter : ''}
-            onClick={() => setFilter('active')}
-          >
-            Active
-          </button>
-          <button
-            className={filter === 'completed' ? styles.activeFilter : ''}
-            onClick={() => setFilter('completed')}
-          >
-            Completed
-          </button>
-        </div>
-        <button className={styles.clearComplBtn} onClick={handleClearCompleted}>
-          Clear Completed
-        </button>
-      </footer>
-    </section>
+          ))}
+        </ul>
+        <TaskFooter
+          tasks={tasks}
+          handleClearCompleted={handleClearCompleted}
+          filter={filter}
+          setFilter={setFilter}
+        />
+      </section>
+      <p className={styles.descript}>Drag and drop to reorder list</p>
+    </>
   )
 }
 

@@ -18,7 +18,6 @@ function App () {
         <TaskFormContainer />
         <TasksList />
       </article>
-      <p className='descript'>Drag and drop to reorder list</p>
     </>
   )
 }
