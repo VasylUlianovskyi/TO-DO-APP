@@ -94,9 +94,12 @@ function Task ({ task, onToggle, onEdit, onDelete, onSetDeadline }) {
         )
       )}
       <div className={styles.editingButtons}>
-        <MdModeEditOutline onClick={handleEditClick} />
-        <CiTimer onClick={handleNewDeadline} />{' '}
-        <MdDeleteOutline onClick={onDelete} />
+        <MdModeEditOutline
+          className={styles.editBtns}
+          onClick={handleEditClick}
+        />
+        <CiTimer className={styles.editBtns} onClick={handleNewDeadline} />{' '}
+        <MdDeleteOutline className={styles.editBtns} onClick={onDelete} />
       </div>
     </li>
   )
