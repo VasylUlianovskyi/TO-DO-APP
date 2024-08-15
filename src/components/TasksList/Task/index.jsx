@@ -43,8 +43,11 @@ function Task ({ task, onToggle, onEdit, onDelete, onSetDeadline }) {
 
   return (
     <li className={styles.taskEl}>
-      <input type='checkbox' checked={task.isDone} onChange={onToggle} />
-      <span onClick={onToggle} className={styles.newCheckboxIcon}></span>
+      <label>
+        <input type='checkbox' checked={task.isDone} onChange={onToggle} />
+        <span className={styles.newCheckboxIcon}></span>
+      </label>
+
       {isEditing ? (
         <input
           className={styles.editTask}

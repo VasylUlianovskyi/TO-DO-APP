@@ -13,11 +13,15 @@ function Weather () {
   }, [dispatch])
 
   if (weatherStatus === 'loading') {
-    return <div>Loading weather...</div>
+    return <span className={styles.downloadDescript}>Loading weather...</span>
   }
 
   if (weatherStatus === 'failed') {
-    return <div>Failed to load weather data</div>
+    return (
+      <span className={styles.downloadDescript}>
+        Failed to load weather data
+      </span>
+    )
   }
 
   return (
