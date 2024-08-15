@@ -3,8 +3,9 @@ import { MdModeEditOutline, MdDeleteOutline } from 'react-icons/md'
 import { CiTimer } from 'react-icons/ci'
 import styles from '../TasksList.module.sass'
 
-function Task ({ task, onToggle, onEdit, onDelete, setDeadline }) {
+function Task ({ task, onToggle, onEdit, onDelete, onSetDeadline }) {
   const [isEditing, setIsEditing] = useState(false)
+  const [isEditingDeadline, setIsEditingDeadline] = useState(false)
   const [newDescription, setNewDescription] = useState(task.description || '')
   const [newDeadline, setNewDeadline] = useState(task.deadline || '')
 
@@ -21,10 +22,10 @@ function Task ({ task, onToggle, onEdit, onDelete, setDeadline }) {
   }
 
   const handleNewDeadline = () => {
-    if (isEditing) {
-      setDeadline(newDeadline)
+    if (isEditingDeadline) {
+      onSetDeadline(newDeadline)
     }
-    setIsEditing(!isEditing)
+    setIsEditingDeadline(!isEditingDeadline)
   }
   const handleKeyDown = e => {
     if (e.key === 'Enter') {
@@ -32,37 +33,65 @@ function Task ({ task, onToggle, onEdit, onDelete, setDeadline }) {
     }
   }
 
+  const saveNewDeadline = e => {
+    if (e.key === 'Enter') {
+      handleNewDeadline()
+    }
+  }
+
+  const isDeadlinePassed = task.deadline && new Date(task.deadline) < new Date()
+
   return (
     <li className={styles.taskEl}>
       <input type='checkbox' checked={task.isDone} onChange={onToggle} />
       <span onClick={onToggle} className={styles.newCheckboxIcon}></span>
       {isEditing ? (
-        <div>
-          <input
-            type='text'
-            value={newDescription}
-            onChange={e => setNewDescription(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <input
-            type='date'
-            value={newDeadline}
-            onChange={e => setNewDeadline(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-        </div>
+        <input
+          className={styles.editTask}
+          type='text'
+          value={newDescription}
+          onChange={e => setNewDescription(e.target.value)}
+          onKeyDown={handleKeyDown}
+          autoFocus
+        />
       ) : (
         <p
-          style={{
-            textDecoration: task.isDone ? 'line-through' : 'none',
-            color: task.isDone ? 'grey' : 'black'
-          }}
+          className={`${styles.taskDescription} ${
+            task.isDone
+              ? styles.taskCompleted
+              : isDeadlinePassed
+              ? styles.taskDeadlinePassed
+              : ''
+          }`}
         >
-          {task.description}{' '}
-          {task.deadline && (
-            <span>{new Date(task.deadline).toLocaleDateString()}</span>
-          )}
+          {task.description}
         </p>
+      )}
+      {isEditingDeadline ? (
+        <input
+          type='date'
+          value={newDeadline}
+          onChange={e => setNewDeadline(e.target.value)}
+          onKeyDown={saveNewDeadline}
+        />
+      ) : (
+        task.deadline && (
+          <span
+            className={`${styles.taskDescription} ${
+              task.isDone
+                ? styles.taskCompleted
+                : isDeadlinePassed
+                ? styles.taskDeadlinePassed
+                : ''
+            }`}
+          >
+            {new Date(task.deadline).toLocaleDateString('uk-UA', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            })}
+          </span>
+        )
       )}
       <div className={styles.editingButtons}>
         <MdModeEditOutline onClick={handleEditClick} />

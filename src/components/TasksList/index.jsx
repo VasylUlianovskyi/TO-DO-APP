@@ -18,11 +18,15 @@ function TasksList () {
   const [filter, setFilter] = useState('all')
 
   const handleToggleTask = id => dispatch(toggleTask({ id }))
+
   const handleEditTask = (id, newDescription) =>
     dispatch(editTask({ id, description: newDescription }))
+
   const handleDeleteTask = id => dispatch(deleteTask({ id }))
+
   const handleDeadline = (id, newDeadline) =>
     dispatch(setDeadline({ id, deadline: newDeadline }))
+
   const handleClearCompleted = () => dispatch(clearCompleted())
 
   const filteredTasks = tasks.filter(task => {

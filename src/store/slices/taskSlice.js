@@ -65,7 +65,7 @@ const tasksSlice = createSlice({
     setDeadline: (state, action) => {
       const task = state.find(task => task.id === action.payload.id)
       if (task && !task.isDone) {
-        task.deadline = action.payload.description
+        task.deadline = action.payload.deadline
         saveTasksToLocalStorage(state)
       } else {
         console.error('Завдання не знайдено або вже виконане.')
